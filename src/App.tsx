@@ -2,6 +2,7 @@ import './App.css'
 import * as React from "react";
 import IngredientsList from "./components/IngredientsList.tsx";
 import MistralRecipe from "./components/MistralRecipe.tsx";
+import {getRecipeFromMistral} from "./ai.tsx";
 
 const App = () => {
     const [ingredients, setIngredients] = React.useState(
@@ -9,8 +10,9 @@ const App = () => {
     )
     const [recipeShown, setRecipeShown] = React.useState(false)
 
-    function toggleRecipeShown() {
-        setRecipeShown(prevShown => !prevShown)
+    async function getRecipe() {
+        const recipeMarkdown = await getRecipeFromMistral(ingredients);
+        console.log(recipeMarkdown)
     }
 
     function addIngredient(formData) {
@@ -36,7 +38,7 @@ const App = () => {
             {ingredients.length > 0 &&
                 <IngredientsList
                     ingredients={ingredients}
-                    toggleRecipeShown={toggleRecipeShown}
+                    getRecipe={getRecipe}
                 />
             }
 
