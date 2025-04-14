@@ -26,9 +26,9 @@ const App: React.FC = () => {
         }
     }
 
-    function addIngredient(formData) {
+    function addIngredient(formData: FormData): void {
         const newIngredient = formData.get("ingredient")
-        if (!newIngredient) {
+        if (!newIngredient || typeof newIngredient !== "string") {
             return
         }
         setIngredients(prevIngredients => [...prevIngredients, newIngredient])
