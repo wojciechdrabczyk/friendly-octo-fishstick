@@ -1,5 +1,7 @@
 import './App.css'
 import * as React from "react";
+import IngredientsList from "./components/IngredientsList.tsx";
+import MistralRecipe from "./components/MistralRecipe.tsx";
 
 const App = () => {
     const [ingredients, setIngredients] = React.useState(
@@ -13,6 +15,9 @@ const App = () => {
 
     function addIngredient(formData) {
         const newIngredient = formData.get("ingredient")
+        if (!newIngredient) {
+            return
+        }
         setIngredients(prevIngredients => [...prevIngredients, newIngredient])
     }
 
@@ -35,8 +40,9 @@ const App = () => {
                 />
             }
 
-            {recipeShown && <ClaudeRecipe/>}
+            {recipeShown && <MistralRecipe/>}
         </main>
+    )
 }
 
 export default App
