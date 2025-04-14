@@ -4,15 +4,26 @@ import IngredientsList from "./components/IngredientsList.tsx";
 import MistralRecipe from "./components/MistralRecipe.tsx";
 import {getRecipeFromMistral} from "./ai.tsx";
 
-const App = () => {
-    const [ingredients, setIngredients] = React.useState(
-        ["all the main spices", "pasta", "ground beef", "tomato paste"]
-    )
-    const [recipeShown, setRecipeShown] = React.useState(false)
+type Ingredient = string;
 
-    async function getRecipe() {
-        const recipeMarkdown = await getRecipeFromMistral(ingredients);
-        console.log(recipeMarkdown)
+const App: React.FC = () => {
+    const [ingredients, setIngredients] = React.useState<Ingredient[]>([])
+    const [recipe, setRecipe] = React.useState<string>("")
+    const [error, setError] = React.useState<string | null>(null);
+    const getRecipe = async (): Promise<void> => {
+        try {
+            const recipeMarkdown = await getRecipeFromMistral(ingredients);
+
+            if (recipeMarkdown) {
+                setRecipe(recipeMarkdown)
+                setError(null);
+            } else {
+                throw new Error("There is no recipe")
+            }
+        } catch (err) {
+            setError((err as Error).message);
+            setRecipe("");
+        }
     }
 
     function addIngredient(formData) {
@@ -42,7 +53,11 @@ const App = () => {
                 />
             }
 
-            {recipeShown && <MistralRecipe/>}
+            {error && (
+                <div className={"error-message"}>{error}</div>
+            )}
+
+            {recipe && <MistralRecipe recipe={recipe}/>}
         </main>
     )
 }
