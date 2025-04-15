@@ -1,10 +1,15 @@
 import ReactMarkdown from 'react-markdown'
+import * as React from "react";
 
-const MistralRecipe = (props) => {
+type MistralRecipeProps = {
+    recipe: string;
+}
+
+const MistralRecipe: React.FC<MistralRecipeProps> = ({recipe}) => {
     return (
         <section>
             <ReactMarkdown className={"suggested-recipe-container"}>
-                {props.recipe}
+                {recipe}
             </ReactMarkdown>
         </section>
     )
